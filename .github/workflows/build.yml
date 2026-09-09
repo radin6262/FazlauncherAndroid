@@ -1,0 +1,112 @@
+name: Fazlauncher Build CI/CD
+
+on:
+  push:
+    branches: [ "main" ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+    inputs:
+      release_draft:
+        description: "Create a GitHub Release draft"
+        required: true
+        default: false
+        type: boolean
+
+# Cancel previous runs for the same PR/branch to save resources
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build & Release
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all history for tags and changelogs
+
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'gradle' # Automatically cache gradle dependencies
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+          cache-key: "flutter-:os:-:channel:-:version:-:arch:-:hash:" # Advanced caching
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Check Formatting
+        run: flutter format --set-exit-if-changed .
+        continue-on-error: true # Don't fail the build but show in logs
+
+      - name: Static Analysis
+        run: flutter analyze
+
+      - name: Build APK (Multi-ABI)
+        run: |
+          flutter build apk --release --split-per-abi \
+            --build-name=1.0.${{ github.run_number }} \
+            --build-number=${{ github.run_number }}
+
+      - name: Build Universal APK
+        run: |
+          flutter build apk --release \
+            --build-name=1.0.${{ github.run_number }} \
+            --build-number=${{ github.run_number }}
+
+      # Optional: Sign the APK if you have secrets configured
+      # You would need to add: KEYSTORE_BASE64, KEYSTORE_PASSWORD, KEY_ALIAS, KEY_PASSWORD to GitHub Secrets
+      - name: Sign APK (Optional)
+        if: env.HAS_SIGNING_SECRETS == 'true'
+        uses: r0adkll/sign-android-release@v1
+        id: sign_app
+        env:
+          HAS_SIGNING_SECRETS: ${{ secrets.KEYSTORE_BASE64 != '' }}
+        with:
+          releaseDirectory: build/app/outputs/flutter-apk
+          signingKeyBase64: ${{ secrets.KEYSTORE_BASE64 }}
+          alias: ${{ secrets.KEY_ALIAS }}
+          keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEY_PASSWORD }}
+
+      - name: Rename & Organize Artifacts
+        run: |
+          mkdir -p artifacts
+          cp build/app/outputs/flutter-apk/app-release.apk artifacts/fazlauncher-universal.apk
+          cp build/app/outputs/flutter-apk/app-arm64-v8a-release.apk artifacts/fazlauncher-arm64.apk
+          cp build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk artifacts/fazlauncher-armv7.apk
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Fazlauncher-Build-${{ github.run_number }}
+          path: artifacts/*.apk
+          retention-days: 7
+
+      - name: Create Release
+        if: (github.event_name == 'push' && contains(github.ref, 'refs/tags/v')) || github.event.inputs.release_draft == 'true'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: artifacts/*.apk
+          draft: ${{ github.event.inputs.release_draft == 'true' }}
+          prerelease: false
+          name: Fazlauncher Release ${{ github.ref_name }}
+          generate_release_notes: true # Auto changelog based on commits
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
