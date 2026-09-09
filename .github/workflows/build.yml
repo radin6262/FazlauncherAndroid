@@ -99,9 +99,10 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: artifacts/*.apk
+          tag_name: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || format('build-{0}', github.run_number) }}
           draft: ${{ github.event.inputs.release_draft == 'true' }}
           prerelease: false
           name: Fazlauncher Release ${{ github.ref_name }}
-          generate_release_notes: true # Auto changelog based on commits
+          generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
