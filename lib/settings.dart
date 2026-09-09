@@ -50,6 +50,7 @@ class _SettingsPageState extends State<SettingsPage> {
   Future<void> _setBackground(String path) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('launcher_background', path);
+    if (!mounted) return;
     setState(() {
       _currentBackground = path;
     });

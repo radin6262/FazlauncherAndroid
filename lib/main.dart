@@ -39,7 +39,7 @@ class Game {
   });
 }
 
-final List<Game> GAMES = [
+final List<Game> games = [
   Game(
     id: "fnaf1",
     name: "Five Nights at Freddy's",
@@ -148,7 +148,7 @@ class _LauncherHomeState extends State<LauncherHome> {
   }
 
   Future<void> _refreshAllStatus() async {
-    for (var game in GAMES) {
+    for (var game in games) {
       final filePath = p.join(_downloadDir.path, Platform.isAndroid ? "${game.id}.apk" : "${game.id}.zip");
       final file = File(filePath);
 
@@ -354,9 +354,9 @@ class _LauncherHomeState extends State<LauncherHome> {
                           controller: _scrollController,
                           scrollDirection: Axis.horizontal,
                           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-                          itemCount: GAMES.length,
+                          itemCount: games.length,
                           itemBuilder: (context, index) {
-                            final game = GAMES[index];
+                            final game = games[index];
                             final isSelected = _selectedIndex == index;
                             
                             return Padding(
