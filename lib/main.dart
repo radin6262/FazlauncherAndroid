@@ -320,7 +320,7 @@ class _LauncherHomeState extends State<LauncherHome> {
                             ),
                             const SizedBox(width: 20),
                             const Text(
-                              "v1.0 - ARR 2026",
+                              "v1.1 - ARR 2026",
                               style: TextStyle(fontSize: 10, color: Colors.grey, fontStyle: FontStyle.italic),
                             ),
                             const Spacer(),

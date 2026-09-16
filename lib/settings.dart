@@ -25,6 +25,16 @@ class _SettingsPageState extends State<SettingsPage> {
       "Animated": "assets/bg/fnaf3.gif",
       "SpringTrap": "assets/bg/sp1.png"
     },
+    "Set 3: FNAF SL": {
+      "Ballora Animated": "assets/bg/ballora.gif",
+      "Circus Baby Animated": "assets/bg/circusbaby.gif",
+      "Funtime Foxy Animated": "assets/bg/funtimefoxy.gif",
+      "Funtime Freddy Animated": "assets/bg/funtimefreddy.gif",
+      "Circus Baby": "assets/bg/circusbaby.png",
+    },
+    "Set 3: FNAF 6": {
+      "Rockstars": "assets/bg/fnaf6.png",
+    },
     "Set 4: Default": {
       "Static Noise": "assets/bg/background.gif"
     }
