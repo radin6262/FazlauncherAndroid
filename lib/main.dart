@@ -76,6 +76,24 @@ final List<Game> games = [
     icon: "F",
     image: "assets/images/fnaf4.png",
   ),
+  Game(
+    id: "fnaf5",
+    name: "Five Nights at Freddy's: Sister Location",
+    package: "com.scottgames.sisterlocation",
+    androidUrl: "https://www.dl.farsroid.com/game/Five-Nights-at-Freddys-Sister-Location-2.0.5(Farsroid.com).apk",
+    windowsUrl: "https://example.com/fnaf4.zip",
+    icon: "F",
+    image: "assets/images/slcard.png",
+  ),
+  Game(
+    id: "fnaf6",
+    name: "Five Nights at Freddy's 6",
+    package: "com.clickteam.freddyfazbearspizzeriasimulator",
+    androidUrl: "https://www.dl.farsroid.com/game/FNaF-6-Pizzeria-Simulator-1.0.8(www.Farsroid.com).apk",
+    windowsUrl: "https://example.com/fnaf4.zip",
+    icon: "F",
+    image: "assets/images/fnaf6card.png",
+  ),
 ];
 
 class FNAFLauncherApp extends StatelessWidget {
