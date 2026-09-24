@@ -252,7 +252,6 @@ class _LauncherHomeState extends State<LauncherHome>
   late Directory _downloadDir;
 
   bool _debugMode = false;
-  bool _musicEnabled = true;
 
   String _backgroundSrc =
       "assets/bg/background.gif";
@@ -306,11 +305,6 @@ class _LauncherHomeState extends State<LauncherHome>
     final prefs =
     await SharedPreferences.getInstance();
 
-    final musicEnabled =
-        prefs.getBool(
-          LauncherMusic.preferenceKey,
-        ) ??
-            true;
 
     if (!mounted) return;
 
@@ -323,8 +317,6 @@ class _LauncherHomeState extends State<LauncherHome>
             'launcher_background',
           ) ??
               "assets/bg/background.gif";
-
-      _musicEnabled = musicEnabled;
     });
 
     // Make the actual player match the saved setting.
@@ -334,19 +326,6 @@ class _LauncherHomeState extends State<LauncherHome>
   Future<void> _syncMusic() async {
     try {
       await LauncherMusic.syncWithPreference();
-
-      if (!mounted) return;
-
-      final prefs =
-      await SharedPreferences.getInstance();
-
-      setState(() {
-        _musicEnabled =
-            prefs.getBool(
-              LauncherMusic.preferenceKey,
-            ) ??
-                true;
-      });
     } catch (e) {
       debugPrint(
         'LAUNCHER MUSIC SYNC ERROR: $e',

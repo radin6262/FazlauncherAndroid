@@ -59,23 +59,23 @@ class _LauncherMusic {
   }
 
   // Added for completeness
-  static Future<void> pause() async {
-    try {
-      await player.pause();
-    } catch (e) {
-      debugPrint("AudioPlayer pause failed: $e");
-    }
-  }
+  // static Future<void> pause() async {
+  //   try {
+  //     await player.pause();
+  //   } catch (e) {
+  //     debugPrint("AudioPlayer pause failed: $e");
+  //   }
+  // }
 
   // Standard cleanup method
-  static Future<void> dispose() async {
-    try {
-      await player.dispose();
-      _configured = false;
-    } catch (e) {
-      debugPrint("AudioPlayer dispose failed: $e");
-    }
-  }
+  // static Future<void> dispose() async {
+  //   try {
+  //     await player.dispose();
+  //     _configured = false;
+  //   } catch (e) {
+  //     debugPrint("AudioPlayer dispose failed: $e");
+  //   }
+  // }
 }
 
 class _SettingsPageState extends State<SettingsPage> {
