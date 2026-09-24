@@ -30,6 +30,8 @@ class _GalleryPageState extends State<GalleryPage> {
       "assets/gallery/WitheredBonnie_Office.png",
       "assets/gallery/OldFreddyTransparent.png",
       "assets/gallery/FNAF2SlumpedGoldenFreddy (1).png",
+      "assets/gallery/ShadowFreddy.png",
+      "assets/gallery/ShadowBonnie_UCN.png",
     ],
     "FNAF 3": [
       "assets/gallery/Extra_Springtrap_1 (1).png",
@@ -52,6 +54,8 @@ class _GalleryPageState extends State<GalleryPage> {
       "assets/gallery/Nightmarefredbearextra.png",
       "assets/gallery/FNaF4_-_Extra_%28Nightmarionne%29.png",
       "assets/gallery/Plushtrap_UCN.png",
+      "assets/gallery/BonnieJACK-O.png",
+      "assets/gallery/Jack-O-Chica.png",
     ],
     "FNAF Sister Location": [
       "assets/gallery/Ballora_Full_Body.png",
@@ -65,14 +69,6 @@ class _GalleryPageState extends State<GalleryPage> {
       "assets/gallery/Minibody.png",
       "assets/gallery/Scooped_Funtime_Foxy.png",
       "assets/gallery/Scooped_Funtime_Freddy.png",
-    ],
-    "Halloween": [
-      "assets/gallery/BonnieJACK-O.png",
-      "assets/gallery/Jack-O-Chica.png",
-    ],
-    "Shadows": [
-      "assets/gallery/ShadowFreddy.png",
-      "assets/gallery/ShadowBonnie_UCN.png",
     ],
   };
 
@@ -115,7 +111,12 @@ class _GalleryPageState extends State<GalleryPage> {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 decoration: BoxDecoration(
-                  border: const Border(right: BorderSide(color: Color(0xFFB71C1C), width: 0.5)),
+                  border: const Border(
+                    right: BorderSide(
+                      color: Color(0xFFB71C1C),
+                      width: 0.5,
+                    ),
+                  ),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -123,15 +124,23 @@ class _GalleryPageState extends State<GalleryPage> {
                     const SizedBox(height: 20),
                     const Text(
                       "Select Set",
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                     ),
                     const SizedBox(height: 10),
-                    const Divider(color: Color(0xFFB71C1C), thickness: 1),
+                    const Divider(
+                      color: Color(0xFFB71C1C),
+                      thickness: 1,
+                    ),
                     const SizedBox(height: 10),
                     Expanded(
                       child: ListView(
                         children: _imageSets.keys.map((String value) {
                           final isSelected = _selectedSet == value;
+
                           return Padding(
                             padding: const EdgeInsets.only(bottom: 12.0),
                             child: InkWell(
@@ -143,21 +152,33 @@ class _GalleryPageState extends State<GalleryPage> {
                               },
                               child: AnimatedContainer(
                                 duration: const Duration(milliseconds: 200),
-                                padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 16,
+                                  horizontal: 12,
+                                ),
                                 decoration: BoxDecoration(
-                                  color: isSelected ? const Color(0xFFB71C1C).withValues(alpha: 0.2) : Colors.black45,
+                                  color: isSelected
+                                      ? const Color(0xFFB71C1C)
+                                      .withValues(alpha: 0.2)
+                                      : Colors.black45,
                                   borderRadius: BorderRadius.circular(10),
                                   border: Border.all(
-                                    color: isSelected ? const Color(0xFFB71C1C) : Colors.grey[900]!,
+                                    color: isSelected
+                                        ? const Color(0xFFB71C1C)
+                                        : Colors.grey[900]!,
                                     width: 1,
                                   ),
                                 ),
                                 child: Text(
                                   value,
                                   style: TextStyle(
-                                    color: isSelected ? Colors.white : Colors.grey,
+                                    color: isSelected
+                                        ? Colors.white
+                                        : Colors.grey,
                                     fontSize: 16,
-                                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                                    fontWeight: isSelected
+                                        ? FontWeight.bold
+                                        : FontWeight.normal,
                                   ),
                                 ),
                               ),
@@ -173,7 +194,7 @@ class _GalleryPageState extends State<GalleryPage> {
 
             // Center: Image Display Area
             Expanded(
-              flex: 2, // Card now takes twice the space of the selection area
+              flex: 2,
               child: Column(
                 children: [
                   // Header
@@ -188,46 +209,76 @@ class _GalleryPageState extends State<GalleryPage> {
                       ),
                     ),
                   ),
-                  
+
                   // Main Image Card
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Colors.grey[900]?.withValues(alpha: 0.5),
-                          borderRadius: BorderRadius.circular(15),
-                          border: Border.all(color: Colors.grey[800]!),
-                        ),
-                        child: Row(
-                          children: [
-                            IconButton(
-                              icon: const Icon(Icons.arrow_back_ios_new, color: Color(0xFFB71C1C), size: 36),
-                              onPressed: _navigateLeft,
+                          image: const DecorationImage(
+                            image: AssetImage(
+                              "assets/images/gallerycardbg.png",
                             ),
-                            Expanded(
-                              child: InteractiveViewer(
-                                child: Image.asset(
-                                  currentImage,
-                                  fit: BoxFit.contain,
-                                  errorBuilder: (context, error, stackTrace) => Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      const Icon(Icons.broken_image, size: 64, color: Colors.grey),
-                                      const SizedBox(height: 10),
-                                      Text("Not Found:\n${currentImage.split('/').last}", 
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(color: Colors.grey, fontSize: 12)),
-                                    ],
+                            fit: BoxFit.cover,
+                          ),
+                          borderRadius: BorderRadius.circular(15),
+                          border: Border.all(
+                            color: Colors.grey[800]!,
+                          ),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(15),
+                          child: Row(
+                            children: [
+                              IconButton(
+                                icon: const Icon(
+                                  Icons.arrow_back_ios_new,
+                                  color: Color(0xFFB71C1C),
+                                  size: 36,
+                                ),
+                                onPressed: _navigateLeft,
+                              ),
+                              Expanded(
+                                child: InteractiveViewer(
+                                  child: Image.asset(
+                                    currentImage,
+                                    fit: BoxFit.contain,
+                                    errorBuilder:
+                                        (context, error, stackTrace) =>
+                                        Column(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                          children: [
+                                            const Icon(
+                                              Icons.broken_image,
+                                              size: 64,
+                                              color: Colors.grey,
+                                            ),
+                                            const SizedBox(height: 10),
+                                            Text(
+                                              "Not Found:\n${currentImage.split('/').last}",
+                                              textAlign: TextAlign.center,
+                                              style: const TextStyle(
+                                                color: Colors.grey,
+                                                fontSize: 12,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                   ),
                                 ),
                               ),
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.arrow_forward_ios, color: Color(0xFFB71C1C), size: 36),
-                              onPressed: _navigateRight,
-                            ),
-                          ],
+                              IconButton(
+                                icon: const Icon(
+                                  Icons.arrow_forward_ios,
+                                  color: Color(0xFFB71C1C),
+                                  size: 36,
+                                ),
+                                onPressed: _navigateRight,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -241,7 +292,12 @@ class _GalleryPageState extends State<GalleryPage> {
               width: 70,
               decoration: BoxDecoration(
                 color: Colors.black.withValues(alpha: 0.8),
-                border: const Border(left: BorderSide(color: Color(0xFFB71C1C), width: 1)),
+                border: const Border(
+                  left: BorderSide(
+                    color: Color(0xFFB71C1C),
+                    width: 1,
+                  ),
+                ),
               ),
               child: Column(
                 children: [
@@ -252,14 +308,22 @@ class _GalleryPageState extends State<GalleryPage> {
                     onTap: () => Navigator.pop(context),
                   ),
                   const Spacer(),
+
                   // Indicators of current image count
                   Text(
                     "${_currentIndex + 1}",
-                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
                   ),
                   Text(
                     "/ ${images.length}",
-                    style: const TextStyle(color: Colors.grey, fontSize: 12),
+                    style: const TextStyle(
+                      color: Colors.grey,
+                      fontSize: 12,
+                    ),
                   ),
                   const SizedBox(height: 20),
                 ],
@@ -277,7 +341,11 @@ class _SidebarActionButton extends StatelessWidget {
   final String label;
   final VoidCallback onTap;
 
-  const _SidebarActionButton({required this.icon, required this.label, required this.onTap});
+  const _SidebarActionButton({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -285,9 +353,19 @@ class _SidebarActionButton extends StatelessWidget {
       onTap: onTap,
       child: Column(
         children: [
-          Icon(icon, color: Colors.white, size: 28),
+          Icon(
+            icon,
+            color: Colors.white,
+            size: 28,
+          ),
           const SizedBox(height: 4),
-          Text(label, style: const TextStyle(color: Colors.white70, fontSize: 10)),
+          Text(
+            label,
+            style: const TextStyle(
+              color: Colors.white70,
+              fontSize: 10,
+            ),
+          ),
         ],
       ),
     );
