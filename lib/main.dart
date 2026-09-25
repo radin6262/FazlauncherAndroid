@@ -686,7 +686,7 @@ class _LauncherHomeState extends State<LauncherHome>
                             ),
 
                             const Text(
-                              "v1.0 - Flutter Port",
+                              "v1.0.1 - Flutter Port",
                               style: TextStyle(
                                 fontSize: 10,
                                 color:
