@@ -32,7 +32,8 @@ class LauncherMusic {
   static final AudioPlayer player = AudioPlayer();
 
   static const String musicAsset = 'audio/launcher.mp3';
-  static const String preferenceKey = 'launcher_music_enabled';
+  static const String preferenceKey =
+      'launcher_music_enabled';
 
   static bool _configured = false;
 
@@ -52,8 +53,14 @@ class LauncherMusic {
       ),
     );
 
-    await player.setPlayerMode(PlayerMode.mediaPlayer);
-    await player.setReleaseMode(ReleaseMode.loop);
+    await player.setPlayerMode(
+      PlayerMode.mediaPlayer,
+    );
+
+    await player.setReleaseMode(
+      ReleaseMode.loop,
+    );
+
     await player.setVolume(1.0);
 
     _configured = true;
@@ -91,7 +98,8 @@ class LauncherMusic {
   }
 
   static Future<void> syncWithPreference() async {
-    final prefs = await SharedPreferences.getInstance();
+    final prefs =
+    await SharedPreferences.getInstance();
 
     final enabled =
         prefs.getBool(preferenceKey) ?? true;
@@ -124,7 +132,13 @@ class Game {
   final String androidUrl;
   final String windowsUrl;
   final String icon;
+
+  // Image used ONLY for the game card.
   final String image;
+
+  // Image used ONLY for the full-screen 4-second
+  // launch splash.
+  final String launchImage;
 
   Game({
     required this.id,
@@ -134,70 +148,96 @@ class Game {
     required this.windowsUrl,
     required this.icon,
     required this.image,
+    required this.launchImage,
   });
 }
+
+// ============================================================
+// Games
+// ============================================================
 
 final List<Game> games = [
   Game(
     id: "fnaf1",
     name: "Five Nights at Freddy's",
-    package: "com.scottgames.fivenightsatfreddys",
+    package:
+    "com.scottgames.fivenightsatfreddys",
     androidUrl:
     "https://www.dl.farsroid.com/game/Five-Night-at-Freddys-2.0.7(www.Farsroid.com).apk",
     windowsUrl:
     "https://abrehamrahi.ir/o/public/sZhIO0o1/",
-    icon: "F️",
+    icon: "F",
     image: "assets/images/fnaf1.png",
+    launchImage: "assets/splash/fnaf1.png",
   ),
   Game(
     id: "fnaf2",
     name: "Five Nights at Freddy's 2",
-    package: "com.scottgames.fnaf2",
+    package:
+    "com.scottgames.fnaf2",
     androidUrl:
     "https://www.dl.farsroid.com/game/Five-Nights-at-Freddys-2-2.0.7(www.Farsroid.com).apk",
-    windowsUrl: "https://example.com/fnaf2.zip",
+    windowsUrl:
+    "https://example.com/fnaf2.zip",
     icon: "F",
     image: "assets/images/fnaf2.png",
+    launchImage: "assets/splash/fnaf2.png",
   ),
   Game(
     id: "fnaf3",
     name: "Five Nights at Freddy's 3",
-    package: "com.scottgames.fnaf3",
+    package:
+    "com.scottgames.fnaf3",
     androidUrl:
     "https://www.dl.farsroid.com/game/Five-Nights-at-Freddys-3-2.0.4(www.Farsroid.com).apk",
-    windowsUrl: "https://example.com/fnaf3.zip",
+    windowsUrl:
+    "https://example.com/fnaf3.zip",
     icon: "F",
     image: "assets/images/fnaf3.png",
+    launchImage: "assets/splash/fnaf3.png",
   ),
   Game(
     id: "fnaf4",
     name: "Five Nights at Freddy's 4",
-    package: "com.scottgames.fnaf4",
+    package:
+    "com.scottgames.fnaf4",
     androidUrl:
     "https://www.dl.farsroid.com/game/Five-Nights-at-Freddys-4-2.0.4(www.Farsroid.com).apk",
-    windowsUrl: "https://example.com/fnaf4.zip",
+    windowsUrl:
+    "https://example.com/fnaf4.zip",
     icon: "F",
     image: "assets/images/fnaf4.png",
+    launchImage: "assets/splash/fnaf4.png",
   ),
   Game(
     id: "fnaf5",
-    name: "Five Nights at Freddy's: Sister Location",
-    package: "com.scottgames.sisterlocation",
+    name:
+    "Five Nights at Freddy's: Sister Location",
+    package:
+    "com.scottgames.sisterlocation",
     androidUrl:
     "https://www.dl.farsroid.com/game/Five-Nights-at-Freddys-Sister-Location-2.0.5(Farsroid.com).apk",
-    windowsUrl: "https://example.com/fnaf4.zip",
+    windowsUrl:
+    "https://example.com/fnaf5.zip",
     icon: "F",
     image: "assets/images/slcard.png",
+    launchImage: "assets/splash/fnaf5.png",
   ),
   Game(
     id: "fnaf6",
-    name: "Five Nights at Freddy's 6",
-    package: "com.clickteam.freddyfazbearspizzeriasimulator",
+    name:
+    "Five Nights at Freddy's 6",
+    package:
+    "com.clickteam.freddyfazbearspizzeriasimulator",
     androidUrl:
     "https://www.dl.farsroid.com/game/FNaF-6-Pizzeria-Simulator-1.0.8(www.Farsroid.com).apk",
-    windowsUrl: "https://example.com/fnaf4.zip",
+    windowsUrl:
+    "https://example.com/fnaf6.zip",
     icon: "F",
-    image: "assets/images/fnaf6card.png",
+    image:
+    "assets/images/fnaf6card.png",
+    launchImage:
+    "assets/splash/fnaf6.png",
   ),
 ];
 
@@ -236,11 +276,14 @@ class LauncherHome extends StatefulWidget {
   const LauncherHome({super.key});
 
   @override
-  State<LauncherHome> createState() => _LauncherHomeState();
+  State<LauncherHome> createState() =>
+      _LauncherHomeState();
 }
 
 class _LauncherHomeState extends State<LauncherHome>
-    with WidgetsBindingObserver {
+    with
+        WidgetsBindingObserver,
+        SingleTickerProviderStateMixin {
   int _selectedIndex = 0;
 
   String _statusText = "Ready";
@@ -263,11 +306,35 @@ class _LauncherHomeState extends State<LauncherHome>
   final ScrollController _scrollController =
   ScrollController();
 
+  // ============================================================
+  // Launch Splash
+  // ============================================================
+
+  late final AnimationController
+  _launchSplashController;
+
+  static const Duration _launchSplashDuration =
+  Duration(seconds: 4);
+
+  bool _showLaunchSplash = false;
+
+  Game? _launchSplashGame;
+
+  // ============================================================
+  // Init
+  // ============================================================
+
   @override
   void initState() {
     super.initState();
 
     WidgetsBinding.instance.addObserver(this);
+
+    _launchSplashController =
+        AnimationController(
+          vsync: this,
+          duration: _launchSplashDuration,
+        );
 
     _loadConfig();
     _initStorage();
@@ -275,14 +342,19 @@ class _LauncherHomeState extends State<LauncherHome>
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(
+      this,
+    );
+
+    _launchSplashController.dispose();
+
     _scrollController.dispose();
 
     super.dispose();
   }
 
   // ============================================================
-  // App lifecycle
+  // App Lifecycle
   // ============================================================
 
   @override
@@ -305,7 +377,6 @@ class _LauncherHomeState extends State<LauncherHome>
     final prefs =
     await SharedPreferences.getInstance();
 
-
     if (!mounted) return;
 
     setState(() {
@@ -319,7 +390,6 @@ class _LauncherHomeState extends State<LauncherHome>
               "assets/bg/background.gif";
     });
 
-    // Make the actual player match the saved setting.
     await _syncMusic();
   }
 
@@ -354,11 +424,11 @@ class _LauncherHomeState extends State<LauncherHome>
       );
     }
 
-    _refreshAllStatus();
+    await _refreshAllStatus();
   }
 
   Future<void> _refreshAllStatus() async {
-    for (var game in games) {
+    for (final game in games) {
       final filePath = p.join(
         _downloadDir.path,
         Platform.isAndroid
@@ -389,8 +459,7 @@ class _LauncherHomeState extends State<LauncherHome>
       String storageText = "None";
 
       if (file.existsSync()) {
-        final size =
-        file.lengthSync();
+        final size = file.lengthSync();
 
         storageText =
         "${(size / (1024 * 1024)).toStringAsFixed(1)} MB";
@@ -412,40 +481,115 @@ class _LauncherHomeState extends State<LauncherHome>
   }
 
   // ============================================================
+  // Launch Splash
+  // ============================================================
+
+  Future<void> _showGameLaunchSplash(
+      Game game,
+      Future<void> Function() action,
+      ) async {
+    if (!mounted) return;
+
+    if (_showLaunchSplash) {
+      return;
+    }
+
+    debugPrint(
+      'LAUNCHER SPLASH: '
+          '${game.name} -> ${game.launchImage}',
+    );
+
+    setState(() {
+      _showLaunchSplash = true;
+      _launchSplashGame = game;
+
+      _statusText =
+      "Preparing ${game.name}...";
+
+      _statusColor = Colors.red;
+    });
+
+    try {
+      await _launchSplashController.forward(
+        from: 0.0,
+      );
+    } on TickerCanceled {
+      return;
+    }
+
+    if (!mounted) return;
+
+    setState(() {
+      _showLaunchSplash = false;
+      _launchSplashGame = null;
+    });
+
+    // Only launch/install after the full 4 seconds.
+    await action();
+  }
+
+  // ============================================================
   // Install / Play
   // ============================================================
 
   Future<void> _handleInstallOrPlay(
       Game game,
       ) async {
+    if (_isDownloading) return;
+
+    if (_showLaunchSplash) return;
+
+    // ==========================================================
+    // Android: already installed
+    // ==========================================================
+
     if (Platform.isAndroid) {
-      bool isInstalled =
+      final isInstalled =
           await InstalledApps.isAppInstalled(
             game.package,
           ) ??
               false;
 
       if (isInstalled) {
-        setState(() {
-          _statusText =
-          "Launching ${game.name}...";
-          _statusColor = Colors.green;
-        });
+        await _showGameLaunchSplash(
+          game,
+              () async {
+            if (!mounted) return;
 
-        await InstalledApps.startApp(
-          game.package,
+            setState(() {
+              _statusText =
+              "Launching ${game.name}...";
+
+              _statusColor = Colors.green;
+            });
+
+            debugPrint(
+              'LAUNCHER: starting installed game '
+                  '${game.name} (${game.package})',
+            );
+
+            await InstalledApps.startApp(
+              game.package,
+            );
+
+            if (!_debugMode && mounted) {
+              setState(() {
+                _statusText =
+                "Game Launched!";
+
+                _statusColor = Colors.green;
+              });
+            }
+          },
         );
-
-        if (!_debugMode && mounted) {
-          setState(
-                () => _statusText =
-            "Game Launched!",
-          );
-        }
 
         return;
       }
     }
+
+    // ==========================================================
+    // Existing downloaded file
+    // ==========================================================
 
     final filePath = p.join(
       _downloadDir.path,
@@ -457,22 +601,46 @@ class _LauncherHomeState extends State<LauncherHome>
     final file = File(filePath);
 
     if (file.existsSync()) {
-      setState(() {
-        _statusText = Platform.isAndroid
-            ? "Installing ${game.name}..."
-            : "Launching ${game.name}...";
+      await _showGameLaunchSplash(
+        game,
+            () async {
+          if (!mounted) return;
 
-        _statusColor = Colors.orange;
-      });
+          setState(() {
+            _statusText =
+            Platform.isAndroid
+                ? "Installing ${game.name}..."
+                : "Launching ${game.name}...";
 
-      await OpenFilex.open(
-        filePath,
+            _statusColor = Colors.orange;
+          });
+
+          debugPrint(
+            'LAUNCHER: opening local game file '
+                '${file.path}',
+          );
+
+          final result =
+          await OpenFilex.open(
+            filePath,
+          );
+
+          debugPrint(
+            'LAUNCHER: OpenFilex result '
+                'type=${result.type} '
+                'message=${result.message}',
+          );
+        },
       );
 
       return;
     }
 
-    _startDownload(
+    // ==========================================================
+    // Nothing downloaded -> download
+    // ==========================================================
+
+    await _startDownload(
       game,
       filePath,
     );
@@ -488,6 +656,8 @@ class _LauncherHomeState extends State<LauncherHome>
       ) async {
     if (_isDownloading) return;
 
+    if (!mounted) return;
+
     setState(() {
       _isDownloading = true;
       _statusText =
@@ -496,8 +666,11 @@ class _LauncherHomeState extends State<LauncherHome>
       _progress = 0;
     });
 
+    http.Client? client;
+    IOSink? sink;
+
     try {
-      final client = http.Client();
+      client = http.Client();
 
       final request = http.Request(
         'GET',
@@ -508,8 +681,19 @@ class _LauncherHomeState extends State<LauncherHome>
         ),
       );
 
+      debugPrint(
+        'LAUNCHER DOWNLOAD: ${request.url}',
+      );
+
       final response =
       await client.send(request);
+
+      if (response.statusCode < 200 ||
+          response.statusCode >= 300) {
+        throw HttpException(
+          'HTTP ${response.statusCode}',
+        );
+      }
 
       final total =
           response.contentLength ?? 0;
@@ -517,18 +701,22 @@ class _LauncherHomeState extends State<LauncherHome>
       var received = 0;
 
       final file = File(filePath);
-      final sink = file.openWrite();
+
+      sink = file.openWrite();
 
       await response.stream.listen(
             (chunk) {
           received += chunk.length;
 
-          sink.add(chunk);
+          sink!.add(chunk);
 
           if (total != 0 && mounted) {
+            final progress =
+                received / total;
+
             setState(() {
               _progress =
-                  received / total;
+                  progress.clamp(0.0, 1.0);
 
               _statusText =
               "Downloading: "
@@ -541,39 +729,68 @@ class _LauncherHomeState extends State<LauncherHome>
       ).asFuture();
 
       await sink.close();
+      sink = null;
+
       client.close();
+      client = null;
 
       if (!mounted) return;
 
       setState(() {
+        _progress = 1;
         _isDownloading = false;
+
         _statusText =
         "Download complete!";
+
         _statusColor = Colors.green;
       });
 
       await _refreshAllStatus();
 
-      _handleInstallOrPlay(game);
+      /*
+       * The downloaded file now exists.
+       *
+       * _handleInstallOrPlay() will consequently show
+       * the game's 4-second splash using launchImage.
+       */
+      await _handleInstallOrPlay(game);
     } catch (e) {
+      try {
+        await sink?.close();
+      } catch (_) {}
+
+      try {
+        client?.close();
+      } catch (_) {}
+
       if (!mounted) return;
 
       setState(() {
         _isDownloading = false;
+        _progress = 0;
+
         _statusText =
         "Download failed: $e";
+
         _statusColor = Colors.red;
       });
+
+      debugPrint(
+        'LAUNCHER DOWNLOAD ERROR: $e',
+      );
     }
   }
 
   // ============================================================
-  // Clear cache
+  // Clear Cache
   // ============================================================
 
   Future<void> _clearCache(
       Game game,
       ) async {
+    if (_showLaunchSplash) return;
+
     final filePath = p.join(
       _downloadDir.path,
       Platform.isAndroid
@@ -586,20 +803,117 @@ class _LauncherHomeState extends State<LauncherHome>
     if (file.existsSync()) {
       await file.delete();
 
+      if (!mounted) return;
+
       setState(() {
         _statusText =
         "Files cleared for ${game.name}";
+
         _statusColor = Colors.orange;
       });
 
       await _refreshAllStatus();
     } else {
+      if (!mounted) return;
+
       setState(() {
         _statusText =
         "Nothing to clear";
+
         _statusColor = Colors.grey;
       });
     }
+  }
+
+  // ============================================================
+  // FULL-SCREEN GAME LAUNCH SPLASH
+  //
+  // ONLY:
+  //   1. Full-screen game-specific image.
+  //   2. One circular progress ring in bottom-left.
+  //
+  // No text.
+  // No countdown.
+  // No linear progress bar.
+  // No labels.
+  // No other controls.
+  // ============================================================
+
+  Widget _buildGameLaunchSplash() {
+    final game = _launchSplashGame;
+
+    if (game == null) {
+      return const SizedBox.shrink();
+    }
+
+    return Positioned.fill(
+      child: Material(
+        color: Colors.black,
+        child: AnimatedBuilder(
+          animation: _launchSplashController,
+          builder: (context, child) {
+            final progress =
+                _launchSplashController.value;
+
+            return Stack(
+              fit: StackFit.expand,
+              children: [
+                // ==================================================
+                // Full-screen game-specific splash image
+                // ==================================================
+
+                Image.asset(
+                  game.launchImage,
+                  fit: BoxFit.cover,
+                  errorBuilder: (
+                      context,
+                      error,
+                      stackTrace,
+                      ) {
+                    debugPrint(
+                      'LAUNCHER SPLASH IMAGE ERROR: '
+                          '${game.launchImage}',
+                    );
+
+                    return Container(
+                      color: Colors.black,
+                    );
+                  },
+                ),
+
+                // ==================================================
+                // ONLY UI ELEMENT:
+                // Progress ring in bottom-left
+                // ==================================================
+
+                Positioned(
+                  left: 24,
+                  bottom: 24,
+                  child: SizedBox(
+                    width: 64,
+                    height: 64,
+                    child:
+                    CircularProgressIndicator(
+                      value: progress,
+                      strokeWidth: 5,
+                      backgroundColor:
+                      Colors.black.withValues(
+                        alpha: 0.45,
+                      ),
+                      valueColor:
+                      const AlwaysStoppedAnimation<
+                          Color>(
+                        Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
+      ),
+    );
   }
 
   // ============================================================
@@ -607,17 +921,21 @@ class _LauncherHomeState extends State<LauncherHome>
   // ============================================================
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+      BuildContext context,
+      ) {
     return Scaffold(
       body: Stack(
         children: [
-          // Background
+          // ========================================================
+          // Main Background
+          // ========================================================
+
           Positioned.fill(
             child: Image.asset(
               _backgroundSrc,
               fit: BoxFit.cover,
-              errorBuilder:
-                  (
+              errorBuilder: (
                   context,
                   error,
                   stackTrace,
@@ -628,19 +946,26 @@ class _LauncherHomeState extends State<LauncherHome>
             ),
           ),
 
+          // ========================================================
+          // Main Launcher UI
+          // ========================================================
+
           SafeArea(
             child: Row(
               children: [
-                // ========================================================
+                // ====================================================
                 // LEFT SIDE
-                // ========================================================
+                // ====================================================
 
                 Expanded(
                   child: Column(
                     crossAxisAlignment:
                     CrossAxisAlignment.start,
                     children: [
+                      // ==============================================
                       // Header
+                      // ==============================================
+
                       Padding(
                         padding:
                         const EdgeInsets.all(
@@ -653,8 +978,7 @@ class _LauncherHomeState extends State<LauncherHome>
                               width: 48,
                               height: 48,
                               fit: BoxFit.contain,
-                              errorBuilder:
-                                  (
+                              errorBuilder: (
                                   context,
                                   error,
                                   stackTrace,
@@ -676,8 +1000,7 @@ class _LauncherHomeState extends State<LauncherHome>
                                 fontSize: 24,
                                 fontWeight:
                                 FontWeight.bold,
-                                color:
-                                Colors.white,
+                                color: Colors.white,
                               ),
                             ),
 
@@ -689,8 +1012,7 @@ class _LauncherHomeState extends State<LauncherHome>
                               "v1.0.1 - Flutter Port",
                               style: TextStyle(
                                 fontSize: 10,
-                                color:
-                                Colors.grey,
+                                color: Colors.grey,
                                 fontStyle:
                                 FontStyle.italic,
                               ),
@@ -740,7 +1062,10 @@ class _LauncherHomeState extends State<LauncherHome>
                         ),
                       ),
 
-                      // Game cards
+                      // ==============================================
+                      // Game Cards
+                      // ==============================================
+
                       Expanded(
                         child:
                         ListView.builder(
@@ -756,8 +1081,7 @@ class _LauncherHomeState extends State<LauncherHome>
                           ),
                           itemCount:
                           games.length,
-                          itemBuilder:
-                              (
+                          itemBuilder: (
                               context,
                               index,
                               ) {
@@ -776,12 +1100,17 @@ class _LauncherHomeState extends State<LauncherHome>
                               ),
                               child:
                               GestureDetector(
-                                onTap: () =>
-                                    setState(
-                                          () =>
-                                      _selectedIndex =
-                                          index,
-                                    ),
+                                onTap: () {
+                                  if (_showLaunchSplash ||
+                                      _isDownloading) {
+                                    return;
+                                  }
+
+                                  setState(() {
+                                    _selectedIndex =
+                                        index;
+                                  });
+                                },
                                 child:
                                 AnimatedContainer(
                                   duration:
@@ -800,7 +1129,8 @@ class _LauncherHomeState extends State<LauncherHome>
                                     ),
                                     border:
                                     Border.all(
-                                      color: isSelected
+                                      color:
+                                      isSelected
                                           ? const Color(
                                         0xFFB71C1C,
                                       )
@@ -825,10 +1155,10 @@ class _LauncherHomeState extends State<LauncherHome>
                                     ]
                                         : [],
                                   ),
-                                  child: Card(
+                                  child:
+                                  Card(
                                     margin:
-                                    EdgeInsets
-                                        .zero,
+                                    EdgeInsets.zero,
                                     clipBehavior:
                                     Clip.antiAlias,
                                     shape:
@@ -842,10 +1172,15 @@ class _LauncherHomeState extends State<LauncherHome>
                                     elevation: 0,
                                     color: Colors
                                         .transparent,
-                                    child: Stack(
+                                    child:
+                                    Stack(
                                       fit: StackFit
                                           .expand,
                                       children: [
+                                        // ==================================
+                                        // Game card image
+                                        // ==================================
+
                                         Image.asset(
                                           game.image,
                                           fit: BoxFit
@@ -857,17 +1192,20 @@ class _LauncherHomeState extends State<LauncherHome>
                                               stackTrace,
                                               ) =>
                                               Container(
-                                                color: Colors
-                                                    .grey[900],
+                                                color:
+                                                Colors.grey[900],
                                                 child:
                                                 const Icon(
                                                   Icons
                                                       .image,
-                                                  size:
-                                                  50,
+                                                  size: 50,
                                                 ),
                                               ),
                                         ),
+
+                                        // ==================================
+                                        // Status icon
+                                        // ==================================
 
                                         Positioned(
                                           top: 8,
@@ -884,6 +1222,10 @@ class _LauncherHomeState extends State<LauncherHome>
                                           ),
                                         ),
 
+                                        // ==================================
+                                        // Action buttons
+                                        // ==================================
+
                                         Positioned(
                                           bottom: 8,
                                           right: 8,
@@ -894,15 +1236,12 @@ class _LauncherHomeState extends State<LauncherHome>
                                                 .min,
                                             children: [
                                               Container(
-                                                width:
-                                                36,
-                                                height:
-                                                36,
+                                                width: 36,
+                                                height: 36,
                                                 decoration:
                                                 BoxDecoration(
-                                                  color: Colors
-                                                      .black
-                                                      .withValues(
+                                                  color:
+                                                  Colors.black.withValues(
                                                     alpha:
                                                     0.5,
                                                   ),
@@ -917,11 +1256,13 @@ class _LauncherHomeState extends State<LauncherHome>
                                                         .play_arrow,
                                                     color:
                                                     Colors.white,
-                                                    size:
-                                                    20,
+                                                    size: 20,
                                                   ),
                                                   onPressed:
-                                                      () =>
+                                                  (_showLaunchSplash ||
+                                                      _isDownloading)
+                                                      ? null
+                                                      : () =>
                                                       _handleInstallOrPlay(
                                                         game,
                                                       ),
@@ -931,20 +1272,16 @@ class _LauncherHomeState extends State<LauncherHome>
                                               ),
 
                                               const SizedBox(
-                                                width:
-                                                8,
+                                                width: 8,
                                               ),
 
                                               Container(
-                                                width:
-                                                36,
-                                                height:
-                                                36,
+                                                width: 36,
+                                                height: 36,
                                                 decoration:
                                                 BoxDecoration(
-                                                  color: Colors
-                                                      .black
-                                                      .withValues(
+                                                  color:
+                                                  Colors.black.withValues(
                                                     alpha:
                                                     0.5,
                                                   ),
@@ -959,11 +1296,13 @@ class _LauncherHomeState extends State<LauncherHome>
                                                         .delete_outline,
                                                     color:
                                                     Colors.white70,
-                                                    size:
-                                                    18,
+                                                    size: 18,
                                                   ),
                                                   onPressed:
-                                                      () =>
+                                                  (_showLaunchSplash ||
+                                                      _isDownloading)
+                                                      ? null
+                                                      : () =>
                                                       _clearCache(
                                                         game,
                                                       ),
@@ -987,24 +1326,29 @@ class _LauncherHomeState extends State<LauncherHome>
                   ),
                 ),
 
-                // ========================================================
+                // ====================================================
                 // SIDEBAR
-                // ========================================================
+                // ====================================================
 
                 Container(
                   width: 70,
-                  decoration: BoxDecoration(
-                    color: Colors.black
-                        .withValues(alpha: 0.8),
-                    border: const Border(
-                      left: BorderSide(
+                  decoration:
+                  BoxDecoration(
+                    color: Colors.black.withValues(
+                      alpha: 0.8,
+                    ),
+                    border:
+                    const Border(
+                      left:
+                      BorderSide(
                         color:
                         Color(0xFFB71C1C),
                         width: 1,
                       ),
                     ),
                   ),
-                  child: Column(
+                  child:
+                  Column(
                     children: [
                       const SizedBox(
                         height: 20,
@@ -1013,13 +1357,21 @@ class _LauncherHomeState extends State<LauncherHome>
                       _SidebarButton(
                         icon:
                         Icons.photo_library,
-                        label: "Gallery",
-                        onTap: () {
-                          Navigator.push(
+                        label:
+                        "Gallery",
+                        onTap:
+                        _showLaunchSplash ||
+                            _isDownloading
+                            ? () {}
+                            : () {
+                          Navigator
+                              .push(
                             context,
                             MaterialPageRoute(
                               builder:
-                                  (context) =>
+                                  (
+                                  context,
+                                  ) =>
                               const GalleryPage(),
                             ),
                           );
@@ -1031,33 +1383,47 @@ class _LauncherHomeState extends State<LauncherHome>
                       ),
 
                       _SidebarButton(
-                        icon: Icons.settings,
-                        label: "Settings",
-                        onTap: () {
-                          Navigator.push(
+                        icon:
+                        Icons.settings,
+                        label:
+                        "Settings",
+                        onTap:
+                        _showLaunchSplash ||
+                            _isDownloading
+                            ? () {}
+                            : () {
+                          Navigator
+                              .push(
                             context,
                             MaterialPageRoute(
                               builder:
-                                  (context) =>
+                                  (
+                                  context,
+                                  ) =>
                               const SettingsPage(),
                             ),
-                          ).then((_) {
-                            // Settings may have changed:
-                            // background and music settings.
-                            _loadConfig();
-                          });
+                          ).then(
+                                (_) {
+                              _loadConfig();
+                            },
+                          );
                         },
                       ),
 
                       const Spacer(),
 
                       IconButton(
-                        icon: const Icon(
+                        icon:
+                        const Icon(
                           Icons.arrow_upward,
                           color:
                           Colors.white70,
                         ),
-                        onPressed: () {
+                        onPressed:
+                        _showLaunchSplash ||
+                            _isDownloading
+                            ? null
+                            : () {
                           _scrollController
                               .animateTo(
                             _scrollController
@@ -1075,12 +1441,17 @@ class _LauncherHomeState extends State<LauncherHome>
                       ),
 
                       IconButton(
-                        icon: const Icon(
+                        icon:
+                        const Icon(
                           Icons.arrow_downward,
                           color:
                           Colors.white70,
                         ),
-                        onPressed: () {
+                        onPressed:
+                        _showLaunchSplash ||
+                            _isDownloading
+                            ? null
+                            : () {
                           _scrollController
                               .animateTo(
                             _scrollController
@@ -1106,13 +1477,23 @@ class _LauncherHomeState extends State<LauncherHome>
               ],
             ),
           ),
+
+          // ==========================================================
+          // FULL-SCREEN GAME LAUNCH SPLASH
+          //
+          // This MUST remain the final Stack child.
+          // It covers the whole screen.
+          // ==========================================================
+
+          if (_showLaunchSplash)
+            _buildGameLaunchSplash(),
         ],
       ),
     );
   }
 
   // ============================================================
-  // Status color
+  // Status Color
   // ============================================================
 
   Color _getStatusColor(
