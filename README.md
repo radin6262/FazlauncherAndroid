@@ -44,4 +44,6 @@ Developed by the Fazlauncher Group:
 - radin6262
 - omid
 
+Sole Code Owner: radin6262
+
 Copyright 2026 ARR.
